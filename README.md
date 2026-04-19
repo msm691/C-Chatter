@@ -24,8 +24,8 @@ Pas besoin de configuration complexe, il suffit d'un Mac ou d'un système Linux 
 - [x] Un serveur robuste (sockets non-bloquantes, multiplexage I/O).
 - [x] Gestion des clients (connexion, déconnexion).
 - [x] Protocole binaire (Header + Payload) pour des échanges sécurisés.
-- [x] **Un client lourd C (Multithreadé pour gérer l'I/O réseau et clavier).**
-- [ ] Le "Broadcast" : le serveur renvoie les messages aux autres utilisateurs.
+- [x] Client lourd C (Multithreadé).
+- [x] **Le "Broadcast" : le serveur relaie les messages à tous les utilisateurs.**
 - [ ] Interface terminal (UI) avec `ncurses` pour le client.
 
 ## 💡 Le petit plus

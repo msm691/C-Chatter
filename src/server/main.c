@@ -5,7 +5,6 @@
 ** main.c
 */
 
-#include <stdio.h>
 #include "server.h"
 
 int main(int argc, char **argv)
@@ -21,5 +20,11 @@ int main(int argc, char **argv)
         return 84;
     }
     printf("Epollaris Server started on port %d...\n", port);
+    
+    if (run_server_loop(server_fd) == -1) {
+        printf("Error: Server loop crashed.\n");
+        return 84;
+    }
+    
     return 0;
 }

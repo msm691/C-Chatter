@@ -9,7 +9,8 @@ CC          = clang
 CFLAGS      = -Wall -Wextra -I./include
 
 SERVER_SRC  = src/server/main.c \
-              src/server/init.c
+              src/server/init.c \
+              src/server/events.c
 
 CLIENT_SRC  = src/client/main.c
 

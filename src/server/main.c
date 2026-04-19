@@ -10,8 +10,16 @@
 
 int main(int argc, char **argv)
 {
+    int server_fd;
+    uint16_t port;
+
     (void)argc;
     (void)argv;
-    printf("Epollaris Server is starting...\n");
+    port = 8080;
+    if (init_server(port, &server_fd) == -1) {
+        printf("Error: Could not initialize server.\n");
+        return 84;
+    }
+    printf("Epollaris Server started on port %d...\n", port);
     return 0;
 }

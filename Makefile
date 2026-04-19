@@ -7,6 +7,7 @@
 
 CC          = clang
 CFLAGS      = -Wall -Wextra -I./include -pthread
+LDFLAGS     = -lncurses
 
 SERVER_SRC  = src/server/main.c \
               src/server/init.c \
@@ -17,7 +18,8 @@ SERVER_SRC  = src/server/main.c \
 CLIENT_SRC  = src/client/main.c \
               src/client/network.c \
               src/client/input_thread.c \
-              src/client/recv_thread.c
+              src/client/recv_thread.c \
+              src/client/ui.c
 
 SERVER_OBJ  = $(SERVER_SRC:.c=.o)
 CLIENT_OBJ  = $(CLIENT_SRC:.c=.o)
@@ -31,7 +33,7 @@ $(SERVER_NAME): $(SERVER_OBJ)
 	$(CC) -o $(SERVER_NAME) $(SERVER_OBJ) $(CFLAGS)
 
 $(CLIENT_NAME): $(CLIENT_OBJ)
-	$(CC) -o $(CLIENT_NAME) $(CLIENT_OBJ) $(CFLAGS)
+	$(CC) -o $(CLIENT_NAME) $(CLIENT_OBJ) $(CFLAGS) $(LDFLAGS)
 
 clean:
 	rm -f $(SERVER_OBJ) $(CLIENT_OBJ)

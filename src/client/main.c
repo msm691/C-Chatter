@@ -21,7 +21,7 @@ int main(int argc, char **argv)
         return 84;
     }
     init_ui(&env);
-    wprintw(env.msg_win, "Connected to Epollaris Server!\n");
+    wprintw(env.msg_win, "Connected to TeleChat Server!\n");
     wrefresh(env.msg_win);
     pthread_create(&recv_tid, NULL, recv_thread_main, &env);
     pthread_create(&input_tid, NULL, input_thread_main, &env);

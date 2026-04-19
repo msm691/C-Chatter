@@ -24,8 +24,8 @@ CLIENT_SRC  = src/client/main.c \
 SERVER_OBJ  = $(SERVER_SRC:.c=.o)
 CLIENT_OBJ  = $(CLIENT_SRC:.c=.o)
 
-SERVER_NAME = chat_server
-CLIENT_NAME = chat_client
+SERVER_NAME = telechat_server
+CLIENT_NAME = telechat_client
 
 all: $(SERVER_NAME) $(CLIENT_NAME)
 

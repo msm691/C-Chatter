@@ -24,7 +24,7 @@ int main(int argc, char **argv)
         printf("Error: Could not initialize server.\n");
         return 84;
     }
-    printf("Epollaris Server started on port %d...\n", port);
+    printf("TeleChat Server started on port %d...\n", port);
     
     if (run_server_loop(&server) == -1) {
         printf("Error: Server loop crashed.\n");

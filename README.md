@@ -1,6 +1,6 @@
-# Epollaris (C-Chatter) 🚀
+# TeleChat (C-Chatter) 🚀
 
-Epollaris est un système de messagerie complet et hybride, alliant la performance du **C** (système) à la flexibilité du **Web** (Node.js/HTML5). Le projet démontre la mise en œuvre d'une architecture client-serveur asynchrone capable de faire dialoguer des terminaux et des navigateurs web en temps réel.
+TeleChat est un système de messagerie complet et hybride, alliant la performance du **C** (système) à la flexibilité du **Web** (Node.js/HTML5). Le projet démontre la mise en œuvre d'une architecture client-serveur asynchrone capable de faire dialoguer des terminaux et des navigateurs web en temps réel.
 
 ## 🏗️ Architecture du Projet
 

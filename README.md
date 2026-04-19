@@ -1,33 +1,63 @@
 # Epollaris (C-Chatter) 🚀
 
-Un petit projet de chat client/serveur codé en C de A à Z ! 
+Epollaris est un système de messagerie complet et hybride, alliant la performance du **C** (système) à la flexibilité du **Web** (Node.js/HTML5). Le projet démontre la mise en œuvre d'une architecture client-serveur asynchrone capable de faire dialoguer des terminaux et des navigateurs web en temps réel.
 
-L'objectif ici n'est pas de réinventer Discord, mais de comprendre ce qui se passe vraiment "sous le capot" d'un serveur réseau. Pour ça, le serveur utilise l'architecture événementielle (avec `select()`) pour gérer jusqu'à 30 connexions simultanées sur un seul thread, sans jamais bloquer.
+## 🏗️ Architecture du Projet
 
-## 🛠️ Comment l'essayer ?
+Le projet se divise en trois composants majeurs qui communiquent en harmonie :
 
-Pas besoin de configuration complexe, il suffit d'un Mac ou d'un système Linux avec `make`.
+1.  **Le Serveur (C)** : Le cœur du système. Il utilise le multiplexage d'E/S avec `select()` pour gérer les connexions de manière non-bloquante.
+2.  **Le Client Lourd (C)** : Une application terminale multithreadée utilisant `ncurses` pour une interface utilisateur scindée entre la lecture et l'écriture.
+3.  **Le Pont Web (Node.js)** : Un proxy agissant comme traducteur entre les **WebSockets** (navigateur) et le **TCP Binaire** (serveur C).
 
-1. **Compilez le projet :**
+## 🛠️ Installation et Lancement
 
-    make
+### 1. Le Serveur et le Client C
+Assurez-vous d'avoir `clang` et la bibliothèque `ncurses` installés sur votre système.
 
-2. **Lancez le serveur :**
+```bash
+# Compilation du serveur et du client
+make re
 
-    ./chat_server
+# Lancement du serveur (port 8080 par défaut)
+./chat_server
 
-3. **Connectez-vous :**
-   Le serveur utilise désormais un **protocole binaire strict**. Seul un client parlant ce "langage" peut communiquer avec lui (Netcat ne fonctionnera plus pour envoyer du texte brut). Le client C complet arrive très bientôt !
+# Lancement du client terminal (dans un autre terminal)
+./chat_client
+```
 
-## 📍 Où en est-on ?
+### 2. L'Interface Web
+Nécessite [Node.js](https://nodejs.org/) installé.
 
-- [x] Un serveur robuste (sockets non-bloquantes, multiplexage I/O).
-- [x] Gestion des clients (connexion, déconnexion).
-- [x] Protocole binaire (Header + Payload) pour des échanges sécurisés.
-- [x] Client lourd C (Multithreadé).
-- [x] Le "Broadcast" : le serveur relaie les messages à tous les utilisateurs.
-- [x] Interface terminal (UI) avec `ncurses` pour le client.
-- [x] **Bonus : Notifications système (X a rejoint/quitté le chat).**
+```bash
+cd web_client
+npm install
+node server.js
+```
+Ouvrez ensuite `web_client/index.html` dans votre navigateur.
 
-## 💡 Le petit plus
-Le code respecte le coding style d'Epitech.
+## 📡 Protocole Réseau
+
+Le système repose sur un protocole binaire strict défini dans `protocol.h` :
+* **Packet Header** : Définit le type de message (`LOGIN_REQ`, `MSG_REQ`) et la taille du payload.
+* **Msg Payload** : Contient le nom de l'expéditeur et le texte brut.
+
+Cette structure garantit que les données sont transmises de manière compacte et rapide.
+
+## 📍 État d'avancement (Roadmap)
+
+- [x] **Serveur robuste** : Sockets non-bloquantes et multiplexage `select()`.
+- [x] **Gestion des clients** : Connexion, déconnexion et nettoyage des ressources.
+- [x] **Protocole binaire** : Header + Payload pour des échanges sécurisés.
+- [x] **Client lourd C** : Architecture multithreadée (Threads d'envoi et de réception séparés).
+- [x] **Broadcast** : Relais en temps réel des messages à tous les connectés.
+- [x] **Interface Ncurses** : UI terminale propre avec fenêtres scindées.
+- [x] **Notifications Système** : Annonces automatiques des arrivées et départs.
+- [x] **Extension Web** : Proxy Node.js et interface HTML5/WebSocket.
+
+## 💡 Concepts Techniques Abordés
+
+* **Multiplexage I/O** : Gestion de plusieurs descripteurs de fichiers sans threads côté serveur via `select()`.
+* **Multithreading** : Utilisation de `pthread` pour gérer l'interface utilisateur et le réseau simultanément côté client.
+* **Protocoles Hybrides** : Conversion de données entre flux TCP binaires et messages JSON WebSockets.
+* **Norme Epitech** : Code structuré, modulaire et respectant le coding style.

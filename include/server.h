@@ -8,13 +8,16 @@
 #ifndef SERVER_H_
     #define SERVER_H_
 
-#include <stdint.h>
-#include <sys/select.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <stdio.h>
-#include <unistd.h>
+    #include <stdint.h>
+    #include <sys/select.h>
+    #include <sys/socket.h>
+    #include <netinet/in.h>
+    #include <arpa/inet.h>
+    #include <stdio.h>
+    #include <unistd.h>
+    #include "protocol.h"
+    #include <signal.h>
+    #include <errno.h>
 
     #define MAX_CLIENTS 30
 
@@ -30,5 +33,7 @@
     int add_client(server_t *server, int client_fd);
     void remove_client(server_t *server, int index);
     int handle_client_message(server_t *server, int client_idx);
+    void broadcast_message(server_t *server, int sender_fd, 
+        packet_header_t *hdr, msg_payload_t *msg);
 
 #endif /* !SERVER_H_ */

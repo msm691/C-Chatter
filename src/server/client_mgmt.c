@@ -34,3 +34,17 @@ void remove_client(server_t *server, int index)
         server->clients[index] = -1;
     }
 }
+
+void broadcast_message(server_t *server, int sender_fd, 
+    packet_header_t *hdr, msg_payload_t *msg)
+{
+    int dest_fd;
+
+    for (int i = 0; i < MAX_CLIENTS; i++) {
+        dest_fd = server->clients[i];
+        if (dest_fd != -1 && dest_fd != sender_fd) {
+            write(dest_fd, hdr, sizeof(packet_header_t));
+            write(dest_fd, msg, hdr->length);
+        }
+    }
+}

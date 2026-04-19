@@ -16,19 +16,16 @@ Pas besoin de configuration complexe, il suffit d'un Mac ou d'un système Linux 
 
     ./chat_server
 
-3. **Connectez-vous (en tant que client) :**
-   Le vrai client C est encore en construction. Pour l'instant, on utilise l'outil natif Netcat pour discuter avec le serveur. Ouvrez plusieurs terminaux et tapez :
-
-    nc localhost 8080
-
-   *Envoyez des messages depuis vos différents terminaux et regardez le serveur réagir en temps réel !*
+3. **Connectez-vous :**
+   Le serveur utilise désormais un **protocole binaire strict**. Seul un client parlant ce "langage" peut communiquer avec lui (Netcat ne fonctionnera plus pour envoyer du texte brut). Le client C complet arrive très bientôt !
 
 ## 📍 Où en est-on ?
 
 - [x] Un serveur robuste (sockets non-bloquantes, multiplexage I/O).
-- [x] Gestion des clients (connexion, déconnexion) et lecture des messages.
+- [x] Gestion des clients (connexion, déconnexion).
+- [x] **Protocole binaire (Header + Payload) pour des échanges sécurisés.**
 - [ ] Le "Broadcast" : le serveur renvoie les messages aux autres utilisateurs.
 - [ ] Un vrai client C avec une belle interface terminal (ncurses).
 
 ## 💡 Le petit plus
-Le code respecte la norme Epitech
+[cite_start]Le code respecte rigoureusement la **norme Epitech** [cite: 5, 121] [cite_start]: fonctions de 20 lignes max [cite: 216][cite_start], typage précis [cite: 644] [cite_start]et architecture sans variables globales[cite: 159].

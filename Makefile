@@ -6,7 +6,7 @@
 ##
 
 CC          = clang
-CFLAGS      = -Wall -Wextra -I./include
+CFLAGS      = -Wall -Wextra -I./include -pthread
 
 SERVER_SRC  = src/server/main.c \
               src/server/init.c \
@@ -15,7 +15,9 @@ SERVER_SRC  = src/server/main.c \
               src/server/packet_parser.c
 
 CLIENT_SRC  = src/client/main.c \
-              src/client/network.c
+              src/client/network.c \
+              src/client/input_thread.c \
+              src/client/recv_thread.c
 
 SERVER_OBJ  = $(SERVER_SRC:.c=.o)
 CLIENT_OBJ  = $(CLIENT_SRC:.c=.o)

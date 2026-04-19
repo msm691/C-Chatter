@@ -26,10 +26,9 @@
     int init_server(uint16_t port, server_t *server);
     int set_non_blocking(int fd);
     int run_server_loop(server_t *server);
-
-    /* Gestion des clients */
     void init_client_list(server_t *server);
     int add_client(server_t *server, int client_fd);
     void remove_client(server_t *server, int index);
+    int handle_client_message(server_t *server, int client_idx);
 
 #endif /* !SERVER_H_ */

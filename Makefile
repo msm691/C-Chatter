@@ -11,7 +11,8 @@ CFLAGS      = -Wall -Wextra -I./include
 SERVER_SRC  = src/server/main.c \
               src/server/init.c \
               src/server/events.c \
-			  src/server/client_mgmt.c
+              src/server/client_mgmt.c \
+              src/server/packet_parser.c
 
 CLIENT_SRC  = src/client/main.c
 

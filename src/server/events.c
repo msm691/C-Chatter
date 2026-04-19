@@ -48,19 +48,9 @@ static void handle_new_connection(server_t *server)
 
 static void check_clients_activity(server_t *server, fd_set *readfds)
 {
-    char buffer[1024];
-    int read_size;
-
     for (int i = 0; i < MAX_CLIENTS; i++) {
         if (server->clients[i] != -1 && FD_ISSET(server->clients[i], readfds)) {
-            read_size = read(server->clients[i], buffer, sizeof(buffer) - 1);
-            if (read_size <= 0) {
-                printf("Client disconnected.\n");
-                remove_client(server, i);
-            } else {
-                buffer[read_size] = '\0';
-                printf("Client %d says: %s", server->clients[i], buffer);
-            }
+            handle_client_message(server, i);
         }
     }
 }

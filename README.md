@@ -25,8 +25,9 @@ Pas besoin de configuration complexe, il suffit d'un Mac ou d'un système Linux 
 - [x] Gestion des clients (connexion, déconnexion).
 - [x] Protocole binaire (Header + Payload) pour des échanges sécurisés.
 - [x] Client lourd C (Multithreadé).
-- [x] **Le "Broadcast" : le serveur relaie les messages à tous les utilisateurs.**
-- [ ] Interface terminal (UI) avec `ncurses` pour le client.
+- [x] Le "Broadcast" : le serveur relaie les messages à tous les utilisateurs.
+- [x] Interface terminal (UI) avec `ncurses` pour le client.
+- [x] **Bonus : Notifications système (X a rejoint/quitté le chat).**
 
 ## 💡 Le petit plus
 Le code respecte le coding style d'Epitech.

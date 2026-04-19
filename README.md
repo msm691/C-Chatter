@@ -29,4 +29,4 @@ Pas besoin de configuration complexe, il suffit d'un Mac ou d'un système Linux 
 - [ ] Interface terminal (UI) avec `ncurses` pour le client.
 
 ## 💡 Le petit plus
-[cite_start]Le code respecte rigoureusement la **norme Epitech** [cite: 5, 121] [cite_start]: fonctions de 20 lignes max [cite: 216][cite_start], typage précis [cite: 644] [cite_start]et architecture sans variables globales[cite: 159].
+Le code respecte le coding style d'Epitech.

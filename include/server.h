@@ -16,11 +16,20 @@
 #include <stdio.h>
 #include <unistd.h>
 
-    int server_main(int argc, char **argv);
-    int init_server(uint16_t port, int *server_fd);
+    #define MAX_CLIENTS 30
+
+    typedef struct server_s {
+        int fd;
+        int clients[MAX_CLIENTS];
+    } server_t;
+
+    int init_server(uint16_t port, server_t *server);
     int set_non_blocking(int fd);
-    
-    // Ajout de la nouvelle fonction
-    int run_server_loop(int server_fd);
+    int run_server_loop(server_t *server);
+
+    /* Gestion des clients */
+    void init_client_list(server_t *server);
+    int add_client(server_t *server, int client_fd);
+    void remove_client(server_t *server, int index);
 
 #endif /* !SERVER_H_ */

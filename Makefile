@@ -8,7 +8,9 @@
 CC          = clang
 CFLAGS      = -Wall -Wextra -I./include
 
-SERVER_SRC  = src/server/main.c
+SERVER_SRC  = src/server/main.c \
+              src/server/init.c
+
 CLIENT_SRC  = src/client/main.c
 
 SERVER_OBJ  = $(SERVER_SRC:.c=.o)

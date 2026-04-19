@@ -5,43 +5,80 @@
 ** events.c
 */
 
+#include <sys/select.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <stdio.h>
+#include <unistd.h>
 #include "server.h"
 
-static int handle_new_connection(int server_fd)
+static void setup_fd_set(server_t *server, fd_set *readfds, int *max_fd)
+{
+    FD_ZERO(readfds);
+    FD_SET(server->fd, readfds);
+    *max_fd = server->fd;
+    for (int i = 0; i < MAX_CLIENTS; i++) {
+        if (server->clients[i] != -1) {
+            FD_SET(server->clients[i], readfds);
+        }
+        if (server->clients[i] > *max_fd) {
+            *max_fd = server->clients[i];
+        }
+    }
+}
+
+static void handle_new_connection(server_t *server)
 {
     int client_fd;
     struct sockaddr_in addr;
     socklen_t len;
 
     len = sizeof(addr);
-    client_fd = accept(server_fd, (struct sockaddr *)&addr, &len);
-    if (client_fd < 0) {
-        return -1;
+    client_fd = accept(server->fd, (struct sockaddr *)&addr, &len);
+    if (client_fd < 0)
+        return;
+    if (add_client(server, client_fd) == -1) {
+        printf("Server full: connection rejected.\n");
+    } else {
+        printf("New connection from %s:%d\n", inet_ntoa(addr.sin_addr),
+            ntohs(addr.sin_port));
     }
-    printf("New connection from %s:%d\n", inet_ntoa(addr.sin_addr),
-        ntohs(addr.sin_port));
-    
-    close(client_fd);
-    return 0;
 }
 
-int run_server_loop(int server_fd)
+static void check_clients_activity(server_t *server, fd_set *readfds)
+{
+    char buffer[1024];
+    int read_size;
+
+    for (int i = 0; i < MAX_CLIENTS; i++) {
+        if (server->clients[i] != -1 && FD_ISSET(server->clients[i], readfds)) {
+            read_size = read(server->clients[i], buffer, sizeof(buffer) - 1);
+            if (read_size <= 0) {
+                printf("Client disconnected.\n");
+                remove_client(server, i);
+            } else {
+                buffer[read_size] = '\0';
+                printf("Client %d says: %s", server->clients[i], buffer);
+            }
+        }
+    }
+}
+
+int run_server_loop(server_t *server)
 {
     fd_set readfds;
     int max_fd;
 
     while (1) {
-        FD_ZERO(&readfds);
-        FD_SET(server_fd, &readfds);
-        max_fd = server_fd;
-
+        setup_fd_set(server, &readfds, &max_fd);
         if (select(max_fd + 1, &readfds, NULL, NULL, NULL) < 0) {
             return -1;
         }
-
-        if (FD_ISSET(server_fd, &readfds)) {
-            handle_new_connection(server_fd);
+        if (FD_ISSET(server->fd, &readfds)) {
+            handle_new_connection(server);
         }
+        check_clients_activity(server, &readfds);
     }
     return 0;
 }

@@ -47,14 +47,15 @@ int create_server_socket(uint16_t port)
     return fd;
 }
 
-int init_server(uint16_t port, int *server_fd)
+int init_server(uint16_t port, server_t *server)
 {
-    *server_fd = create_server_socket(port);
-    if (*server_fd < 0) {
+    server->fd = create_server_socket(port);
+    if (server->fd < 0) {
         return -1;
     }
-    if (set_non_blocking(*server_fd) < 0 || listen(*server_fd, SOMAXCONN) < 0) {
+    if (set_non_blocking(server->fd) < 0 || listen(server->fd, SOMAXCONN) < 0) {
         return -1;
     }
+    init_client_list(server);
     return 0;
 }

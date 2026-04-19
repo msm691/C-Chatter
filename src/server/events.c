@@ -5,12 +5,6 @@
 ** events.c
 */
 
-#include <sys/select.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <stdio.h>
-#include <unistd.h>
 #include "server.h"
 
 static void setup_fd_set(server_t *server, fd_set *readfds, int *max_fd)

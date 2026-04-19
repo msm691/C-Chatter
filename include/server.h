@@ -15,8 +15,8 @@
     #include <arpa/inet.h>
     #include <stdio.h>
     #include <unistd.h>
+    #include <string.h>
     #include "protocol.h"
-    #include <signal.h>
     #include <errno.h>
 
     #define MAX_CLIENTS 30
@@ -24,6 +24,7 @@
     typedef struct server_s {
         int fd;
         int clients[MAX_CLIENTS];
+        char usernames[MAX_CLIENTS][MAX_NAME_LENGTH];
     } server_t;
 
     int init_server(uint16_t port, server_t *server);
@@ -36,4 +37,4 @@
     void broadcast_message(server_t *server, int sender_fd, 
         packet_header_t *hdr, msg_payload_t *msg);
 
-#endif /* !SERVER_H_ */
+#endif

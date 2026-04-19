@@ -5,13 +5,13 @@
 ** client_mgmt.c
 */
 
-#include <unistd.h>
 #include "server.h"
 
 void init_client_list(server_t *server)
 {
     for (int i = 0; i < MAX_CLIENTS; i++) {
         server->clients[i] = -1;
+        memset(server->usernames[i], 0, MAX_NAME_LENGTH);
     }
 }
 
@@ -32,6 +32,7 @@ void remove_client(server_t *server, int index)
     if (server->clients[index] != -1) {
         close(server->clients[index]);
         server->clients[index] = -1;
+        memset(server->usernames[index], 0, MAX_NAME_LENGTH);
     }
 }
 

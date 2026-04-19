@@ -14,6 +14,9 @@ int main(int argc, char **argv)
 
     (void)argc;
     (void)argv;
+    
+    signal(SIGPIPE, SIG_IGN);
+
     port = 8080;
     if (init_server(port, &server) == -1) {
         printf("Error: Could not initialize server.\n");

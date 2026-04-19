@@ -15,8 +15,14 @@ static int read_exact(int fd, void *buf, size_t n)
 
     while (total < n) {
         b_read = read(fd, (char *)buf + total, n - total);
-        if (b_read <= 0) {
-            return b_read;
+        if (b_read == 0) {
+            return 0;
+        }
+        if (b_read < 0) {
+            if (errno == EAGAIN || errno == EWOULDBLOCK) {
+                continue;
+            }
+            return -1;
         }
         total += b_read;
     }
@@ -39,7 +45,8 @@ int handle_client_message(server_t *server, int client_idx)
             remove_client(server, client_idx);
             return -1;
         }
-        printf("Client %d [Type %d] says: %s\n", fd, hdr.type, msg.text);
+        printf("[%s] says: %s", msg.sender, msg.text);
+        broadcast_message(server, fd, &hdr, &msg);
     }
     return 0;
 }

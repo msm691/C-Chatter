@@ -1,4 +1,12 @@
+# Système
+.DS_Store
+
+# Binaires C et Objets
 *.o
-chat_client
 chat_server
-coding-style-reports.log
+chat_client
+
+# Node.js
+node_modules/
+npm-debug.log
+package-lock.json

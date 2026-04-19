@@ -5,6 +5,8 @@
 ** main.c
 */
 
+#include <stdio.h>
+#include <signal.h>
 #include "server.h"
 
 int main(int argc, char **argv)
@@ -14,7 +16,7 @@ int main(int argc, char **argv)
 
     (void)argc;
     (void)argv;
-    
+
     signal(SIGPIPE, SIG_IGN);
 
     port = 8080;

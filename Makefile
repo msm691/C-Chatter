@@ -14,7 +14,8 @@ SERVER_SRC  = src/server/main.c \
               src/server/client_mgmt.c \
               src/server/packet_parser.c
 
-CLIENT_SRC  = src/client/main.c
+CLIENT_SRC  = src/client/main.c \
+              src/client/network.c
 
 SERVER_OBJ  = $(SERVER_SRC:.c=.o)
 CLIENT_OBJ  = $(CLIENT_SRC:.c=.o)

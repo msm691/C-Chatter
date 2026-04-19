@@ -6,10 +6,18 @@
 */
 
 #ifndef CLIENT_H_
-#define CLIENT_H_
+    #define CLIENT_H_
 
-#include "protocol.h"
+    #include <stdio.h>
+    #include <unistd.h>
+    #include <sys/socket.h>
+    #include <netinet/in.h>
+    #include <arpa/inet.h>
+    #include <unistd.h>
+    #include <stdint.h>
+    #include "protocol.h"
 
-int client_main(int argc, char **argv);
+    int connect_to_server(const char *ip, uint16_t port);
+    int client_main(int argc, char **argv);
 
 #endif /* !CLIENT_H_ */

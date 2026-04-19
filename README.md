@@ -23,9 +23,10 @@ Pas besoin de configuration complexe, il suffit d'un Mac ou d'un système Linux 
 
 - [x] Un serveur robuste (sockets non-bloquantes, multiplexage I/O).
 - [x] Gestion des clients (connexion, déconnexion).
-- [x] **Protocole binaire (Header + Payload) pour des échanges sécurisés.**
+- [x] Protocole binaire (Header + Payload) pour des échanges sécurisés.
+- [x] **Un client lourd C (Multithreadé pour gérer l'I/O réseau et clavier).**
 - [ ] Le "Broadcast" : le serveur renvoie les messages aux autres utilisateurs.
-- [ ] Un vrai client C avec une belle interface terminal (ncurses).
+- [ ] Interface terminal (UI) avec `ncurses` pour le client.
 
 ## 💡 Le petit plus
 [cite_start]Le code respecte rigoureusement la **norme Epitech** [cite: 5, 121] [cite_start]: fonctions de 20 lignes max [cite: 216][cite_start], typage précis [cite: 644] [cite_start]et architecture sans variables globales[cite: 159].

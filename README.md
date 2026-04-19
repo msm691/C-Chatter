@@ -1,78 +1,34 @@
-# Epollaris (C-Chatter)
+# Epollaris (C-Chatter) 🚀
 
-> Un système de chat Client/Serveur haute performance en C, basé sur l'architecture événementielle (I/O Multiplexing).
+Un petit projet de chat client/serveur codé en C de A à Z ! 
 
-Epollaris est un projet de programmation système et réseau démontrant la création d'une architecture client-serveur robuste. Développé en C pur, ce projet illustre la maîtrise des sockets POSIX, de la gestion de la mémoire, et du multiplexage avec `select()` pour gérer de multiples connexions simultanées sans recourir à un modèle lourd basé sur les threads (C10k problem approach).
+L'objectif ici n'est pas de réinventer Discord, mais de comprendre ce qui se passe vraiment "sous le capot" d'un serveur réseau. Pour ça, le serveur utilise l'architecture événementielle (avec `select()`) pour gérer jusqu'à 30 connexions simultanées sur un seul thread, sans jamais bloquer.
 
-Ce projet respecte strictement la **Norme de codage Epitech** (C Coding Style).
+## 🛠️ Comment l'essayer ?
 
-## 🚀 Fonctionnalités Actuelles
+Pas besoin de configuration complexe, il suffit d'un Mac ou d'un système Linux avec `make`.
 
-### Serveur (`chat_server`)
-- **I/O Multiplexing :** Utilisation de `select()` pour gérer les I/O de manière asynchrone sur un seul thread.
-- **Sockets Non-Bloquantes :** Configuration via `fcntl()` pour garantir qu'aucune opération réseau ne fige le serveur.
-- **Gestion des Clients :** Capacité d'accepter et de maintenir jusqu'à 30 connexions TCP simultanées.
-- **Lecture en Temps Réel :** Réception et affichage en temps réel des messages envoyés par les clients.
-- **Gestion des Déconnexions :** Détection propre des clients qui quittent le serveur et libération des ressources (`File Descriptors`).
+1. **Compilez le projet :**
 
-### Client (`chat_client`)
-- *L'architecture est en place, mais le client C est actuellement en cours de développement (voir la section Avancement).*
+    make
 
-## 🛠️ Installation & Compilation
+2. **Lancez le serveur :**
 
-### Prérequis
-- Un compilateur C (`gcc` ou `clang`)
-- `make`
-- Un environnement type UNIX (Linux, macOS)
+    ./chat_server
 
-### Compilation
-Cloner le dépôt et compiler le projet à l'aide du `Makefile` fourni :
+3. **Connectez-vous (en tant que client) :**
+   Le vrai client C est encore en construction. Pour l'instant, on utilise l'outil natif Netcat pour discuter avec le serveur. Ouvrez plusieurs terminaux et tapez :
 
-```bash
-git clone [https://github.com/VOTRE_PSEUDO/C-Chatter.git](https://github.com/VOTRE_PSEUDO/C-Chatter.git)
-cd C-Chatter
-make
-```
+    nc localhost 8080
 
-Le `Makefile` génère deux exécutables distincts :
-- `chat_server`
-- `chat_client`
+   *Envoyez des messages depuis vos différents terminaux et regardez le serveur réagir en temps réel !*
 
-**Autres commandes Make disponibles :**
-- `make clean` : Supprime les fichiers objets (`.o`).
-- `make fclean` : Supprime les fichiers objets et les exécutables.
-- `make re` : Recompile entièrement le projet.
+## 📍 Où en est-on ?
 
-## 💻 Utilisation
+- [x] Un serveur robuste (sockets non-bloquantes, multiplexage I/O).
+- [x] Gestion des clients (connexion, déconnexion) et lecture des messages.
+- [ ] Le "Broadcast" : le serveur renvoie les messages aux autres utilisateurs.
+- [ ] Un vrai client C avec une belle interface terminal (ncurses).
 
-### 1. Démarrer le serveur
-Lancez simplement l'exécutable du serveur. Par défaut, il écoute sur le port **8080**.
-
-```bash
-./chat_server
-```
-
-### 2. Se connecter en tant que client
-Le client C (`chat_client`) étant en phase de construction de son interface utilisateur, vous pouvez tester le serveur en utilisant l'outil standard `nc` (Netcat). Ouvrez un ou plusieurs nouveaux terminaux et tapez :
-
-```bash
-nc localhost 8080
-```
-Vous pouvez maintenant taper vos messages dans Netcat, ils seront reçus et affichés instantanément par le serveur !
-
-## 📊 État d'Avancement (Roadmap)
-
-- [x] **Étape 1 :** Architecture du projet, Makefiles et conformité stricte au C Coding Style.
-- [x] **Étape 2 :** Cœur du serveur (Sockets POSIX, `select()`, connexions non-bloquantes).
-- [x] **Étape 3 :** Gestion de la concurrence (suivi des FD multiples, lecture des messages entrants).
-- [ ] **Étape 4 :** Implémentation du protocole binaire (Header + Payload) pour structurer les paquets réseau.
-- [ ] **Étape 5 :** Logique de Broadcast (le serveur renvoie les messages aux autres clients connectés).
-- [ ] **Étape 6 :** Développement du client lourd C avec interface terminal (`ncurses`) et multithreading (lecture/écriture simultanées).
-
-## 📝 Norme de Codage (C Coding Style)
-Ce projet est écrit en respectant des règles de formatage strictes pour garantir une lisibilité et une maintenabilité professionnelles :
-- Maximum 80 colonnes par ligne.
-- Maximum 20 lignes par fonction.
-- Maximum 5 fonctions par fichier.
-- Pas de variables globales.
-- Indentation stricte à 4 espaces.
+## 💡 Le petit plus
+Le code respecte la norme Epitech

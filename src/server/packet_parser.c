@@ -77,6 +77,20 @@ static void process_private_msg(server_t *server, msg_payload_t *msg)
     send_direct_message(server, target, &hdr, msg);
 }
 
+static void process_join_channel(server_t *server, int idx, msg_payload_t *msg)
+{
+    char target[MAX_NAME_LENGTH] = {0};
+    char buffer[MAX_MSG_LENGTH];
+
+    if (strlen(msg->text) > 6) {
+        strncpy(target, msg->text + 6, MAX_NAME_LENGTH - 1);
+        target[strcspn(target, "\n")] = 0;
+        strncpy(server->channels[idx], target, MAX_NAME_LENGTH - 1);
+        snprintf(buffer, sizeof(buffer), "Bienvenue dans %s\n", target);
+        send_system_direct(server->clients[idx], buffer);
+    }
+}
+
 int handle_client_message(server_t *server, int client_idx)
 {
     packet_header_t hdr;
@@ -93,12 +107,15 @@ int handle_client_message(server_t *server, int client_idx)
     if (read_exact(fd, &msg, hdr.length) <= 0) return -1;
     if (hdr.type == LOGIN_REQ) {
         strncpy(server->usernames[client_idx], msg.sender, MAX_NAME_LENGTH - 1);
+        strcpy(server->channels[client_idx], "#general");
         send_system_event(server, fd, msg.sender, "joined");
     } else {
         if (strncmp(msg.text, "/msg ", 5) == 0) {
             process_private_msg(server, &msg);
         } else if (strncmp(msg.text, "/users", 6) == 0) {
             process_user_list(server, fd);
+        } else if (strncmp(msg.text, "/join ", 6) == 0) {
+            process_join_channel(server, client_idx, &msg);
         } else {
             printf("[%s] says: %s", msg.sender, msg.text);
             broadcast_message(server, fd, &hdr, &msg);

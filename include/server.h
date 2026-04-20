@@ -25,6 +25,7 @@
         int fd;
         int clients[MAX_CLIENTS];
         char usernames[MAX_CLIENTS][MAX_NAME_LENGTH];
+        char channels[MAX_CLIENTS][MAX_NAME_LENGTH];
     } server_t;
 
     int init_server(uint16_t port, server_t *server);

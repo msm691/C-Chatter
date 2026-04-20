@@ -36,5 +36,9 @@
     int handle_client_message(server_t *server, int client_idx);
     void broadcast_message(server_t *server, int sender_fd, 
         packet_header_t *hdr, msg_payload_t *msg);
+    void broadcast_message(server_t *server, int sender_fd, 
+        packet_header_t *hdr, msg_payload_t *msg);
+    int send_direct_message(server_t *server, const char *target, 
+        packet_header_t *hdr, msg_payload_t *msg);
 
 #endif

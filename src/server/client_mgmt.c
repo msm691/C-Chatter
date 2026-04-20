@@ -49,3 +49,17 @@ void broadcast_message(server_t *server, int sender_fd,
         }
     }
 }
+
+int send_direct_message(server_t *server, const char *target, 
+    packet_header_t *hdr, msg_payload_t *msg)
+{
+    for (int i = 0; i < MAX_CLIENTS; i++) {
+        if (server->clients[i] != -1 && 
+            strcmp(server->usernames[i], target) == 0) {
+            write(server->clients[i], hdr, sizeof(packet_header_t));
+            write(server->clients[i], msg, hdr->length);
+            return 1;
+        }
+    }
+    return 0;
+}

@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2026
-** C-Chatter
+** TeleChat
 ** File description:
 ** packet_parser.c
 */
@@ -36,6 +36,47 @@ static void send_system_event(server_t *server, int fd, const char *user, const 
     broadcast_message(server, fd, &hdr, &msg);
 }
 
+static void send_system_direct(int fd, const char *text)
+{
+    packet_header_t hdr = {MSG_REQ, sizeof(msg_payload_t)};
+    msg_payload_t msg;
+
+    memset(&msg, 0, sizeof(msg));
+    strcpy(msg.sender, "Server");
+    strncpy(msg.text, text, MAX_MSG_LENGTH - 1);
+    write(fd, &hdr, sizeof(packet_header_t));
+    write(fd, &msg, hdr.length);
+}
+
+static void process_user_list(server_t *server, int fd)
+{
+    char buffer[MAX_MSG_LENGTH] = "En ligne: ";
+    
+    for (int i = 0; i < MAX_CLIENTS; i++) {
+        if (server->clients[i] != -1 && server->usernames[i][0]) {
+            strncat(buffer, server->usernames[i], 
+                MAX_MSG_LENGTH - strlen(buffer) - 1);
+            strncat(buffer, " ", 2);
+        }
+    }
+    strncat(buffer, "\n", 2);
+    send_system_direct(fd, buffer);
+}
+
+static void process_private_msg(server_t *server, msg_payload_t *msg)
+{
+    char target[MAX_NAME_LENGTH] = {0};
+    char *space = strchr(msg->text + 5, ' ');
+    packet_header_t hdr = {MSG_REQ, sizeof(msg_payload_t)};
+    char buffer[MAX_MSG_LENGTH];
+
+    if (!space) return;
+    strncpy(target, msg->text + 5, space - (msg->text + 5));
+    snprintf(buffer, sizeof(buffer), "[Private] %s", space + 1);
+    strncpy(msg->text, buffer, MAX_MSG_LENGTH - 1);
+    send_direct_message(server, target, &hdr, msg);
+}
+
 int handle_client_message(server_t *server, int client_idx)
 {
     packet_header_t hdr;
@@ -54,8 +95,14 @@ int handle_client_message(server_t *server, int client_idx)
         strncpy(server->usernames[client_idx], msg.sender, MAX_NAME_LENGTH - 1);
         send_system_event(server, fd, msg.sender, "joined");
     } else {
-        printf("[%s] says: %s", msg.sender, msg.text);
-        broadcast_message(server, fd, &hdr, &msg);
+        if (strncmp(msg.text, "/msg ", 5) == 0) {
+            process_private_msg(server, &msg);
+        } else if (strncmp(msg.text, "/users", 6) == 0) {
+            process_user_list(server, fd);
+        } else {
+            printf("[%s] says: %s", msg.sender, msg.text);
+            broadcast_message(server, fd, &hdr, &msg);
+        }
     }
     return 0;
 }

@@ -91,6 +91,29 @@ static void process_join_channel(server_t *server, int idx, msg_payload_t *msg)
     }
 }
 
+static void process_nick_command(server_t *server, int idx, msg_payload_t *msg)
+{
+    char new_name[MAX_NAME_LENGTH] = {0};
+    char old_name[MAX_NAME_LENGTH] = {0};
+    packet_header_t hdr = {MSG_REQ, sizeof(msg_payload_t)};
+    msg_payload_t sys_msg;
+
+    if (strlen(msg->text) > 6) {
+        strncpy(new_name, msg->text + 6, MAX_NAME_LENGTH - 1);
+        new_name[strcspn(new_name, "\n")] = 0;
+        
+        strcpy(old_name, server->usernames[idx]);
+        strncpy(server->usernames[idx], new_name, MAX_NAME_LENGTH - 1);
+        
+        memset(&sys_msg, 0, sizeof(sys_msg));
+        strcpy(sys_msg.sender, "Server");
+        snprintf(sys_msg.text, sizeof(sys_msg.text), "%s renamed to %s\n", old_name, new_name);
+        
+        send_system_direct(server->clients[idx], sys_msg.text);
+        broadcast_message(server, server->clients[idx], &hdr, &sys_msg);
+    }
+}
+
 int handle_client_message(server_t *server, int client_idx)
 {
     packet_header_t hdr;
@@ -100,24 +123,27 @@ int handle_client_message(server_t *server, int client_idx)
     if (read_exact(fd, &hdr, sizeof(packet_header_t)) <= 0) {
         if (server->usernames[client_idx][0] != '\0')
             send_system_event(server, fd, server->usernames[client_idx], "left");
-        printf("Client %d disconnected.\n", fd);
         remove_client(server, client_idx);
         return -1;
     }
     if (read_exact(fd, &msg, hdr.length) <= 0) return -1;
+
     if (hdr.type == LOGIN_REQ) {
         strncpy(server->usernames[client_idx], msg.sender, MAX_NAME_LENGTH - 1);
         strcpy(server->channels[client_idx], "#general");
         send_system_event(server, fd, msg.sender, "joined");
     } else {
+        strncpy(msg.sender, server->usernames[client_idx], MAX_NAME_LENGTH - 1);
+
         if (strncmp(msg.text, "/msg ", 5) == 0) {
             process_private_msg(server, &msg);
         } else if (strncmp(msg.text, "/users", 6) == 0) {
             process_user_list(server, fd);
         } else if (strncmp(msg.text, "/join ", 6) == 0) {
             process_join_channel(server, client_idx, &msg);
+        } else if (strncmp(msg.text, "/nick ", 6) == 0) {
+            process_nick_command(server, client_idx, &msg);
         } else {
-            printf("[%s] says: %s", msg.sender, msg.text);
             broadcast_message(server, fd, &hdr, &msg);
         }
     }

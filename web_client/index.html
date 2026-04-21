@@ -91,6 +91,16 @@
                 } else if (text.includes("left")) {
                     onlineUsers.delete(text.split(" ")[0]);
                     updateSidebar();
+                } else if (text.includes("renamed to")) {
+                    const parts = text.trim().split(" renamed to ");
+                    if (parts.length === 2) {
+                        const oldName = parts[0];
+                        const newName = parts[1];
+                        onlineUsers.delete(oldName);
+                        onlineUsers.add(newName);
+                        if (username === oldName) username = newName;
+                        updateSidebar();
+                    }
                 }
             } else {
                 div.innerHTML = `<span class="sender">[${sender}] :</span> ${text}`;
@@ -125,7 +135,7 @@
 
             } else {
                 ws.send(JSON.stringify({ type: 'message', username: username, text: val }));
-                if (val !== '/users') {
+                if (val !== '/users' && !val.startsWith('/nick ')) {
                     appendMessage(username, val);
                 }
             }

@@ -1,63 +1,69 @@
-# TeleChat (C-Chatter) 🚀
+# 🚀 TeleChat : Quand le bas niveau rencontre le Web
 
-TeleChat est un système de messagerie complet et hybride, alliant la performance du **C** (système) à la flexibilité du **Web** (Node.js/HTML5). Le projet démontre la mise en œuvre d'une architecture client-serveur asynchrone capable de faire dialoguer des terminaux et des navigateurs web en temps réel.
+Salut ! 👋
 
-## 🏗️ Architecture du Projet
+---
 
-Le projet se divise en trois composants majeurs qui communiquent en harmonie :
+## 🧠 L'Architecture
 
-1.  **Le Serveur (C)** : Le cœur du système. Il utilise le multiplexage d'E/S avec `select()` pour gérer les connexions de manière non-bloquante.
-2.  **Le Client Lourd (C)** : Une application terminale multithreadée utilisant `ncurses` pour une interface utilisateur scindée entre la lecture et l'écriture.
-3.  **Le Pont Web (Node.js)** : Un proxy agissant comme traducteur entre les **WebSockets** (navigateur) et le **TCP Binaire** (serveur C).
+Le projet repose sur un trio de composants qui travaillent en parfaite harmonie :
 
-## 🛠️ Installation et Lancement
+1. **Le Cerveau (Serveur C)** 🧠 : C'est la source de vérité. Conçu autour du multiplexage d'E/S avec `select()`, il encaisse les connexions de manière non-bloquante. Il gère l'état des salons, les pseudos, et route les paquets à la vitesse de l'éclair.
+2. **Le Puriste (Client C)** 💻 : Une interface terminale multithreadée construite avec `ncurses`. Parfait pour ceux qui aiment chatter sans quitter leur IDE.
+3. **Le Traducteur (Proxy Node.js)** 🌐 : Un pont léger qui écoute les WebSockets du navigateur et les traduit en flux TCP binaires pour le serveur C. C'est lui qui permet d'avoir une belle interface Web dynamique !
 
-### 1. Le Serveur et le Client C
-Assurez-vous d'avoir `clang` et la bibliothèque `ncurses` installés sur votre système.
+---
 
+## 🛠️ Installation
+
+Pas besoin de configuration complexe. Si vous avez `clang`, `ncurses` et `node`, vous êtes prêt.
+
+### 1. Lancer le projet
 ```bash
-# Compilation du serveur et du client
 make re
-
-# Lancement du serveur (port 8080 par défaut)
-./chat_server
-
-# Lancement du client terminal (dans un autre terminal)
-./chat_client
+./telechat_server  # Le serveur écoute sur le port 8080
+```
+*Ouvrez un autre terminal pour le client :*
+```bash
+./telechat_client
 ```
 
-### 2. L'Interface Web
-Nécessite [Node.js](https://nodejs.org/) installé.
-
+### 2. Rejoindre depuis le Web
 ```bash
 cd web_client
 npm install
 node server.js
 ```
-Ouvrez ensuite `web_client/index.html` dans votre navigateur.
+*Ouvrez simplement le fichier `web_client/index.html` dans Chrome, Firefox ou Safari !*
 
-## 📡 Protocole Réseau
+---
 
-Le système repose sur un protocole binaire strict défini dans `protocol.h` :
-* **Packet Header** : Définit le type de message (`LOGIN_REQ`, `MSG_REQ`) et la taille du payload.
-* **Msg Payload** : Contient le nom de l'expéditeur et le texte brut.
+## 💬 Commandes Disponibles
 
-Cette structure garantit que les données sont transmises de manière compacte et rapide.
+Le serveur gère nativement plusieurs commandes pour pimenter vos discussions, que vous soyez sur le web ou le terminal :
 
-## 📍 État d'avancement (Roadmap)
+* 🚪 `/join #nom_du_salon` : Marre du brouhaha de `#general` ? Créez ou rejoignez un salon privé.
+* 🤫 `/msg <pseudo> <texte>` : Pour murmurer un secret à un utilisateur précis.
+* 🕵️ `/users` : Affiche la liste des personnes en ligne (géré automatiquement par l'interface Web !).
+* 🎭 `/nick <nouveau_nom>` : Envie d'une nouvelle identité ? Changez de pseudo à la volée.
+* 🏃 `/quit` : Ferme proprement votre session (sur le terminal).
 
-- [x] **Serveur robuste** : Sockets non-bloquantes et multiplexage `select()`.
-- [x] **Gestion des clients** : Connexion, déconnexion et nettoyage des ressources.
-- [x] **Protocole binaire** : Header + Payload pour des échanges sécurisés.
-- [x] **Client lourd C** : Architecture multithreadée (Threads d'envoi et de réception séparés).
-- [x] **Broadcast** : Relais en temps réel des messages à tous les connectés.
-- [x] **Interface Ncurses** : UI terminale propre avec fenêtres scindées.
-- [x] **Notifications Système** : Annonces automatiques des arrivées et départs.
-- [x] **Extension Web** : Proxy Node.js et interface HTML5/WebSocket.
+---
 
-## 💡 Concepts Techniques Abordés
+## 🗺️ La Roadmap
 
-* **Multiplexage I/O** : Gestion de plusieurs descripteurs de fichiers sans threads côté serveur via `select()`.
-* **Multithreading** : Utilisation de `pthread` pour gérer l'interface utilisateur et le réseau simultanément côté client.
-* **Protocoles Hybrides** : Conversion de données entre flux TCP binaires et messages JSON WebSockets.
-* **Norme Epitech** : Code structuré, modulaire et respectant le coding style.
+TeleChat est en constante évolution. Voici où nous en sommes :
+
+**✅ Déjà implémenté :**
+- Architecture réseau asynchrone non-bloquante.
+- Protocole binaire strict (Header + Payload) ultra-léger.
+- Interface Ncurses scindée et multithreadée.
+- WebSockets et UI HTML5 avec barre latérale dynamique.
+- Système de salons (Channels) et de messages privés.
+
+**🚧 Prochaines étapes :**
+- [ ] **Indicateur de frappe** : Voir quand vos amis sont en train d'écrire.
+- [ ] **Historique (Catch-up)** : Ne ratez plus les messages envoyés avant votre connexion grâce à un Ring Buffer en mémoire.
+- [ ] **Sécurité & Base de données** : Inscription et authentification avec SQLite et mots de passe hachés.
+
+---
